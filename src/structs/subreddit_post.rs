@@ -3,8 +3,6 @@ use serde::{Deserialize, Serialize};
 #[derive(Debug, Clone, Deserialize, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct SubredditPost {
-    #[serde(rename = "__typename")]
-    pub(crate) typename: PostType,
     pub id: String,
     pub created_at: String,
     pub title: String,
@@ -28,9 +26,4 @@ pub struct SubredditPost {
     pub is_self_post: bool,
     pub is_spoiler: bool,
     pub is_stickied: bool,
-}
-
-#[derive(Debug, Clone, Deserialize, Serialize)]
-pub enum PostType {
-    SubredditPost,
 }

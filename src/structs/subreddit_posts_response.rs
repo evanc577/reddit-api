@@ -1,5 +1,4 @@
 use serde::Deserialize;
-use serde_with::serde_as;
 
 use super::subreddit_post::SubredditPost;
 
@@ -20,12 +19,11 @@ struct PostFeed {
     elements: Elements,
 }
 
-#[serde_as]
 #[derive(Debug, Clone, Deserialize)]
 #[serde(rename_all = "camelCase")]
 struct Elements {
     page_info: PageInfo,
-    #[serde_as(as = "serde_with::VecSkipError<_>")]
+    // #[serde_as(as = "serde_with::VecSkipError<_>")]
     edges: Vec<Edge>,
 }
 
@@ -39,7 +37,14 @@ pub(crate) struct PageInfo {
 #[derive(Debug, Clone, Deserialize)]
 #[serde(rename_all = "camelCase")]
 struct Edge {
-    node: SubredditPost,
+    node: PostType,
+}
+
+#[derive(Debug, Clone, Deserialize)]
+#[serde(tag = "__typename")]
+pub enum PostType {
+    SubredditPost(SubredditPost),
+    AdPost,
 }
 
 impl SubredditPostsResponse {
@@ -53,7 +58,12 @@ impl SubredditPostsResponse {
             .elements
             .edges
             .into_iter()
-            .map(|e| e.node)
+            .filter_map(|e| {
+                match e.node {
+                    PostType::SubredditPost(post) => Some(post),
+                    _ => None,
+                }
+            })
             .collect()
     }
 }
