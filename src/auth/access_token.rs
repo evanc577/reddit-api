@@ -81,7 +81,8 @@ mod test {
     use crate::RedditClient;
 
     #[tokio::test]
-    async fn works() {
-        RedditClient::new().unwrap();
+    async fn access_token() {
+        let client = RedditClient::new().unwrap();
+        dbg!(client.access_token.authentication(&client.client).await).unwrap();
     }
 }
