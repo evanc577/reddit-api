@@ -5,9 +5,9 @@ use page_turner::PageTurner;
 use reqwest::{header, Client, ClientBuilder};
 
 use crate::auth::AccessToken;
+use crate::constants;
 use crate::error::Error;
 use crate::structs::{SubredditPost, SubredditPostsRequest, SubredditSort};
-use crate::constants;
 
 /// The main client which all Reddit APIs are called through.
 pub struct RedditClient {

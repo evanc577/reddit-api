@@ -1,5 +1,7 @@
 use serde::{Deserialize, Serialize};
 
+use super::{Redditor, Media};
+
 #[derive(Debug, Clone, Deserialize, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct SubredditPost {
@@ -9,6 +11,13 @@ pub struct SubredditPost {
     pub domain: String,
     pub url: String,
     pub permalink: String,
+
+    pub author_info: Redditor,
+    pub author_flair: Option<AuthorFlair>,
+    pub flair: Option<PostFlair>,
+
+    pub content: Option<PostContent>,
+    pub media: Option<Media>,
 
     #[serde(deserialize_with = "crate::utils::deserialize_option_float_to_int")]
     pub score: Option<i64>,
@@ -27,3 +36,64 @@ pub struct SubredditPost {
     pub is_spoiler: bool,
     pub is_stickied: bool,
 }
+
+#[derive(Debug, Clone, Deserialize, Serialize)]
+#[serde(rename_all = "camelCase")]
+pub struct PostContent {
+    pub markdown: String,
+    pub richtext: String,
+    pub html: String,
+}
+
+
+#[derive(Debug, Clone, Deserialize, Serialize)]
+#[serde(rename_all = "camelCase")]
+pub struct PostFlair {
+    #[serde(rename = "type")]
+    pub flair_type: PostFlairType,
+    pub text: String,
+    pub rich_text: Option<String>,
+    pub text_color: TextColor,
+    pub template: PostFlairTemplate,
+}
+
+#[derive(Debug, Clone, Deserialize, Serialize)]
+#[serde(rename_all = "camelCase")]
+pub enum PostFlairType {
+    Text,
+    Richtext,
+}
+
+#[derive(Debug, Clone, Deserialize, Serialize)]
+#[serde(rename_all = "camelCase")]
+pub struct PostFlairTemplate {
+    pub id: Option<String>,
+    pub background_color: Option<String>,
+    pub is_editable: bool,
+}
+
+#[derive(Debug, Clone, Deserialize, Serialize)]
+#[serde(rename_all = "camelCase")]
+pub struct AuthorFlair {
+    pub text: String,
+    pub rich_text: Option<String>,
+    pub text_color: TextColor,
+    pub template: AuthorFlairTemplate,
+}
+
+#[derive(Debug, Clone, Deserialize, Serialize)]
+#[serde(rename_all = "camelCase")]
+pub struct AuthorFlairTemplate {
+    pub id: Option<String>,
+    pub background_color: Option<String>,
+    pub is_mod_only: bool,
+    pub is_editable: bool,
+}
+
+#[derive(Debug, Clone, Deserialize, Serialize)]
+#[serde(rename_all = "SCREAMING_SNAKE_CASE")]
+pub enum TextColor {
+    Light,
+    Dark,
+}
+

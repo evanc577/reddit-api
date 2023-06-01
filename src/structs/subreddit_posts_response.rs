@@ -23,7 +23,6 @@ struct PostFeed {
 #[serde(rename_all = "camelCase")]
 struct Elements {
     page_info: PageInfo,
-    // #[serde_as(as = "serde_with::VecSkipError<_>")]
     edges: Vec<Edge>,
 }
 
@@ -58,11 +57,9 @@ impl SubredditPostsResponse {
             .elements
             .edges
             .into_iter()
-            .filter_map(|e| {
-                match e.node {
-                    PostType::SubredditPost(post) => Some(post),
-                    _ => None,
-                }
+            .filter_map(|e| match e.node {
+                PostType::SubredditPost(post) => Some(post),
+                _ => None,
             })
             .collect()
     }

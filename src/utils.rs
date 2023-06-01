@@ -19,7 +19,9 @@ where
     Ok(d)
 }
 
-pub(crate) fn deserialize_option_float_to_int<'de, D>(deserializer: D) -> Result<Option<i64>, D::Error>
+pub(crate) fn deserialize_option_float_to_int<'de, D>(
+    deserializer: D,
+) -> Result<Option<i64>, D::Error>
 where
     D: Deserializer<'de>,
 {
