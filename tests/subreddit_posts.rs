@@ -12,7 +12,8 @@ async fn subreddit_posts() {
         .take(100);
     let mut count = 0;
     while let Some(post) = stream.next().await {
-        dbg!(post.unwrap());
+        let post = post.unwrap();
+        dbg!(&post);
         count += 1;
     }
     assert_eq!(count, 100);

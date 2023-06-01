@@ -11,12 +11,15 @@ use crate::error::Error;
 use crate::structs::{SubredditPost, SubredditPostsRequest, SubredditSort};
 use crate::{auth, constants};
 
+/// The main client which all Reddit APIs are called through.
 pub struct RedditClient {
     pub(crate) client: Client,
     pub(crate) access_token: Token,
 }
 
 impl RedditClient {
+    /// Create a new RedditClient.
+    /// This method authenticates with Reddit.
     pub async fn init() -> Result<Self, Error> {
         #[rustfmt::skip]
         let headers = {
@@ -49,11 +52,12 @@ impl RedditClient {
         })
     }
 
-    pub async fn subreddit_posts<'a>(
-        &'a self,
+    /// Get a stream of posts from a subreddit.
+    pub async fn subreddit_posts(
+        &self,
         subreddit: impl AsRef<str>,
         sort: SubredditSort,
-    ) -> impl 'a + Send + Stream<Item = Result<SubredditPost, Error>> {
+    ) -> impl '_ + Send + Stream<Item = Result<SubredditPost, Error>> {
         self.pages(SubredditPostsRequest::new(
             subreddit.as_ref().to_owned(),
             sort,

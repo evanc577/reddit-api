@@ -27,7 +27,7 @@ impl PageTurner<SubredditPostsRequest> for RedditClient {
             .await?;
         let status = response.status();
         if !status.is_success() {
-            return Err(Error::Reddit(response.text().await?).into());
+            return Err(Error::Reddit(response.text().await?));
         }
 
         // Parse response

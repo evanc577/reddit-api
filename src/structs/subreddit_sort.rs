@@ -2,7 +2,7 @@ use serde::Serialize;
 
 use super::sort_range::SortRange;
 
-#[derive(Debug, Serialize)]
+#[derive(Debug, Clone, Serialize)]
 #[serde(rename_all = "SCREAMING_SNAKE_CASE")]
 #[serde(tag = "sort", content = "range")]
 pub enum SubredditSort {

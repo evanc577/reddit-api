@@ -18,3 +18,19 @@ where
     let d = Duration::new(s, 0);
     Ok(d)
 }
+
+pub(crate) fn deserialize_option_float_to_int<'de, D>(deserializer: D) -> Result<Option<i64>, D::Error>
+where
+    D: Deserializer<'de>,
+{
+    let f = Option::<f64>::deserialize(deserializer)?;
+    Ok(f.map(|x| x as i64))
+}
+
+pub(crate) fn deserialize_float_to_int<'de, D>(deserializer: D) -> Result<i64, D::Error>
+where
+    D: Deserializer<'de>,
+{
+    let f = f64::deserialize(deserializer)?;
+    Ok(f as i64)
+}
