@@ -4,7 +4,7 @@ use reddit_api::RedditClient;
 
 #[tokio::test]
 async fn subreddit_posts() {
-    let client = RedditClient::init().await.unwrap();
+    let client = RedditClient::new().unwrap();
 
     let mut stream = client
         .subreddit_posts("dreamcatcher", SubredditSort::New)

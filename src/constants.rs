@@ -1,6 +1,5 @@
 pub(crate) mod header {
     pub static ACCEPT_ENCODING: &str = "gzip, deflate";
-    pub static AUTHORIZATION: &str = "basic b2hYcG9xclpZdWIxa2c6";
     pub static USER_AGENT: &str = "Reddit/Version 2023.21.0/Build 956283/Android 9";
 
     pub static CLIENT_VENDOR_ID: &str = "64f84305-0fc1-4643-b156-d61b35a882d9";

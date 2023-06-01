@@ -1,8 +1,10 @@
+/// Reddit errors.
 #[derive(Debug)]
 pub enum Error {
+    /// Errors from Reddit API.
     Reddit(String),
+    /// Errors from reqwest, such as network errors.
     Reqwest(reqwest::Error),
-    Other(String),
 }
 
 impl std::fmt::Display for Error {
@@ -10,7 +12,6 @@ impl std::fmt::Display for Error {
         match self {
             Self::Reddit(e) => write!(f, "{}", e),
             Self::Reqwest(e) => write!(f, "{}", e),
-            Self::Other(s) => write!(f, "{}", s),
         }
     }
 }
@@ -20,11 +21,5 @@ impl std::error::Error for Error {}
 impl From<reqwest::Error> for Error {
     fn from(value: reqwest::Error) -> Self {
         Self::Reqwest(value)
-    }
-}
-
-impl From<serde_json::Error> for Error {
-    fn from(value: serde_json::Error) -> Self {
-        Self::Other(value.to_string())
     }
 }
