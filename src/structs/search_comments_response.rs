@@ -37,13 +37,7 @@ struct Comments {
 #[derive(Debug, Clone, Deserialize)]
 #[serde(rename_all = "camelCase")]
 struct Edge {
-    node: CommentType,
-}
-
-#[derive(Debug, Clone, Deserialize)]
-#[serde(tag = "__typename")]
-pub enum CommentType {
-    Comment(Comment),
+    node: Comment,
 }
 
 impl Response<Comment> for SearchCommentsResponse {
@@ -58,9 +52,7 @@ impl Response<Comment> for SearchCommentsResponse {
             .comments
             .edges
             .into_iter()
-            .filter_map(|e| match e.node {
-                CommentType::Comment(comment) => Some(comment),
-            })
+            .map(|e| e.node)
             .collect()
     }
 }

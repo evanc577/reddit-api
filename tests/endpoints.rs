@@ -1,8 +1,6 @@
 use futures::stream::StreamExt;
-use reddit_api::structs::SearchCommentsSort;
+use reddit_api::structs::{SearchCommentsSort, SearchPostsSort, SortRange, SubredditSort};
 use reddit_api::RedditClient;
-use reddit_api::structs::{SearchPostsSort, SortRange};
-use reddit_api::structs::SubredditSort;
 
 const NUM_ITEMS: usize = 100;
 

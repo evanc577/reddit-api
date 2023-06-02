@@ -4,9 +4,8 @@ use reqwest::header;
 
 use crate::constants::GRAPHQL_URL;
 use crate::error::Error;
-use crate::structs;
 use crate::traits::{Request, Response};
-use crate::RedditClient;
+use crate::{structs, RedditClient};
 
 macro_rules! impl_page_turner {
     ($req:ty,$resp:ty,$item:ty) => {

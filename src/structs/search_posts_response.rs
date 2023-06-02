@@ -40,6 +40,7 @@ struct Edge {
     node: PostType,
 }
 
+#[allow(clippy::large_enum_variant)]
 #[derive(Debug, Clone, Deserialize)]
 #[serde(tag = "__typename")]
 pub enum PostType {
