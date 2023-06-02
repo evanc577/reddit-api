@@ -1,10 +1,11 @@
 use serde::Serialize;
 
 use super::subreddit_sort::SubredditSort;
+use crate::constants::request::SUBREDDIT_POSTS_ID;
 
 #[derive(Debug, Serialize)]
 pub(crate) struct SubredditPostsRequest {
-    id: String,
+    id: &'static str,
     variables: Variables,
 }
 
@@ -21,7 +22,7 @@ struct Variables {
 impl SubredditPostsRequest {
     pub(crate) fn new(subreddit_name: String, sort: SubredditSort) -> Self {
         Self {
-            id: "3496a5858eb9".into(),
+            id: SUBREDDIT_POSTS_ID,
             variables: Variables {
                 subreddit_name,
                 sort,

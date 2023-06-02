@@ -1,6 +1,6 @@
 use serde::{Deserialize, Serialize};
 
-use super::{Redditor, Media};
+use super::{Media, Redditor};
 
 #[derive(Debug, Clone, Deserialize, Serialize)]
 #[serde(rename_all = "camelCase")]
@@ -44,7 +44,6 @@ pub struct PostContent {
     pub richtext: String,
     pub html: String,
 }
-
 
 #[derive(Debug, Clone, Deserialize, Serialize)]
 #[serde(rename_all = "camelCase")]
@@ -96,4 +95,3 @@ pub enum TextColor {
     Light,
     Dark,
 }
-

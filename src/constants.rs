@@ -10,3 +10,9 @@ pub(crate) mod header {
 }
 
 pub(crate) static GRAPHQL_URL: &str = "https://gql.reddit.com/";
+
+pub(crate) mod request {
+    pub static SUBREDDIT_POSTS_ID: &str = "3496a5858eb9";
+    pub static SEARCH_COMMENTS_ID: &str = "7300d86da013";
+    pub static SEARCH_POSTS_ID: &str = "78271215900a";
+}

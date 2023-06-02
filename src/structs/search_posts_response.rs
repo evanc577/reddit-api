@@ -1,29 +1,34 @@
 use serde::Deserialize;
 
-use super::subreddit_post::SubredditPost;
-use super::PageInfo;
+use super::{PageInfo, SubredditPost};
 
 #[derive(Debug, Deserialize)]
 #[serde(rename_all = "camelCase")]
-pub(crate) struct SubredditPostsResponse {
+pub(crate) struct SearchPostsResponse {
     data: Data,
 }
 
-#[derive(Debug, Clone, Deserialize)]
+#[derive(Debug, Deserialize)]
 #[serde(rename_all = "camelCase")]
 struct Data {
-    post_feed: PostFeed,
+    search: Search,
 }
 
-#[derive(Debug, Clone, Deserialize)]
+#[derive(Debug, Deserialize)]
 #[serde(rename_all = "camelCase")]
-struct PostFeed {
-    elements: Elements,
+struct Search {
+    general: General,
 }
 
-#[derive(Debug, Clone, Deserialize)]
+#[derive(Debug, Deserialize)]
 #[serde(rename_all = "camelCase")]
-struct Elements {
+struct General {
+    posts: Posts,
+}
+
+#[derive(Debug, Deserialize)]
+#[serde(rename_all = "camelCase")]
+struct Posts {
     page_info: PageInfo,
     edges: Vec<Edge>,
 }
@@ -41,15 +46,16 @@ pub enum PostType {
     AdPost,
 }
 
-impl SubredditPostsResponse {
+impl SearchPostsResponse {
     pub(crate) fn page_info(&self) -> &PageInfo {
-        &self.data.post_feed.elements.page_info
+        &self.data.search.general.posts.page_info
     }
 
     pub(crate) fn posts(self) -> Vec<SubredditPost> {
         self.data
-            .post_feed
-            .elements
+            .search
+            .general
+            .posts
             .edges
             .into_iter()
             .filter_map(|e| match e.node {

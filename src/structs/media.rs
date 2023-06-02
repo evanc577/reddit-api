@@ -1,6 +1,6 @@
 use serde::{Deserialize, Serialize};
 
-use super::{MediaSource, Dimensions};
+use super::{Dimensions, MediaSource};
 
 #[derive(Debug, Clone, Deserialize, Serialize)]
 #[serde(rename_all = "camelCase")]
