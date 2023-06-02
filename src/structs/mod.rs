@@ -1,8 +1,12 @@
+mod comment;
 mod dimensions;
 mod media;
 mod media_source;
 mod page_info;
 mod redditor;
+mod search_comments_request;
+mod search_comments_response;
+mod search_comments_sort;
 mod search_posts_request;
 mod search_posts_response;
 mod search_posts_sort;
@@ -12,11 +16,15 @@ mod subreddit_posts_request;
 mod subreddit_posts_response;
 mod subreddit_sort;
 
+pub use comment::*;
 pub use dimensions::Dimensions;
 pub use media::*;
 pub use media_source::MediaSource;
 pub(crate) use page_info::PageInfo;
 pub use redditor::Redditor;
+pub(crate) use search_comments_request::SearchCommentsRequest;
+pub(crate) use search_comments_response::SearchCommentsResponse;
+pub use search_comments_sort::SearchCommentsSort;
 pub(crate) use search_posts_request::SearchPostsRequest;
 pub(crate) use search_posts_response::SearchPostsResponse;
 pub use search_posts_sort::SearchPostsSort;

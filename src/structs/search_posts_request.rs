@@ -5,6 +5,7 @@ use crate::constants::request::SEARCH_POSTS_ID;
 use crate::traits::Request;
 
 #[derive(Debug, Serialize)]
+#[serde(rename_all = "camelCase")]
 pub(crate) struct SearchPostsRequest {
     id: &'static str,
     variables: Variables,

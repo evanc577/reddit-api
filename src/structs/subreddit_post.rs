@@ -7,6 +7,7 @@ use super::{Media, Redditor};
 pub struct SubredditPost {
     pub id: String,
     pub created_at: String,
+    pub edited_at: Option<String>,
     pub title: String,
     pub domain: String,
     pub url: String,

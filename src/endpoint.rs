@@ -4,10 +4,7 @@ use reqwest::header;
 
 use crate::constants::GRAPHQL_URL;
 use crate::error::Error;
-use crate::structs::{
-    SearchPostsRequest, SearchPostsResponse, SubredditPost, SubredditPostsRequest,
-    SubredditPostsResponse,
-};
+use crate::structs;
 use crate::traits::{Request, Response};
 use crate::RedditClient;
 
@@ -47,5 +44,18 @@ macro_rules! impl_page_turner {
     };
 }
 
-impl_page_turner!(SubredditPostsRequest, SubredditPostsResponse, SubredditPost);
-impl_page_turner!(SearchPostsRequest, SearchPostsResponse, SubredditPost);
+impl_page_turner!(
+    structs::SubredditPostsRequest,
+    structs::SubredditPostsResponse,
+    structs::SubredditPost
+);
+impl_page_turner!(
+    structs::SearchPostsRequest,
+    structs::SearchPostsResponse,
+    structs::SubredditPost
+);
+impl_page_turner!(
+    structs::SearchCommentsRequest,
+    structs::SearchCommentsResponse,
+    structs::Comment
+);

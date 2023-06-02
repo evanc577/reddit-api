@@ -8,7 +8,8 @@ use crate::access_token::AccessToken;
 use crate::constants;
 use crate::error::Error;
 use crate::structs::{
-    SearchPostsRequest, SearchPostsSort, SubredditPost, SubredditPostsRequest, SubredditSort,
+    Comment, SearchCommentsRequest, SearchCommentsSort, SearchPostsRequest, SearchPostsSort,
+    SubredditPost, SubredditPostsRequest, SubredditSort,
 };
 
 /// The main client which all Reddit APIs are called through.
@@ -50,7 +51,7 @@ impl RedditClient {
         })
     }
 
-    /// Get a stream of posts from a subreddit.
+    /// Subreddit posts.
     pub async fn subreddit_posts(
         &self,
         subreddit: impl AsRef<str>,
@@ -63,13 +64,23 @@ impl RedditClient {
         .items()
     }
 
-    /// Search posts
+    /// Search posts.
     pub async fn search_posts(
         &self,
         query: impl AsRef<str>,
         sort: SearchPostsSort,
     ) -> impl '_ + Send + Stream<Item = Result<SubredditPost, Error>> {
         self.pages(SearchPostsRequest::new(query.as_ref().to_owned(), sort))
+            .items()
+    }
+
+    /// Search comments.
+    pub async fn search_comments(
+        &self,
+        query: impl AsRef<str>,
+        sort: SearchCommentsSort,
+    ) -> impl '_ + Send + Stream<Item = Result<Comment, Error>> {
+        self.pages(SearchCommentsRequest::new(query.as_ref().to_owned(), sort))
             .items()
     }
 
