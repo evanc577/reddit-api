@@ -1,8 +1,8 @@
 use serde::Serialize;
 
-use crate::constants::request::SEARCH_POSTS_ID;
-
 use super::search_posts_sort::SearchPostsSort;
+use crate::constants::request::SEARCH_POSTS_ID;
+use crate::traits::Request;
 
 #[derive(Debug, Serialize)]
 pub(crate) struct SearchPostsRequest {
@@ -61,7 +61,7 @@ impl From<&Variables> for VariablesSerialized {
         }
         Self {
             query: value.query.clone(),
-            product_surface: value.product_surface.clone(),
+            product_surface: value.product_surface,
             after_cursor: value.after_cursor.clone(),
             sort: value.sort.to_string(),
             filters,
@@ -82,8 +82,10 @@ impl SearchPostsRequest {
             },
         }
     }
+}
 
-    pub(crate) fn set_cursor(&mut self, after: String) {
-        self.variables.after_cursor = Some(after)
+impl Request for SearchPostsRequest {
+    fn set_cursor(&mut self, cursor: String) {
+        self.variables.after_cursor = Some(cursor)
     }
 }

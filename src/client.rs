@@ -4,10 +4,12 @@ use futures::Stream;
 use page_turner::PageTurner;
 use reqwest::{header, Client, ClientBuilder};
 
-use crate::auth::AccessToken;
+use crate::access_token::AccessToken;
 use crate::constants;
 use crate::error::Error;
-use crate::structs::{SubredditPost, SubredditPostsRequest, SubredditSort, SearchPostsSort, SearchPostsRequest};
+use crate::structs::{
+    SearchPostsRequest, SearchPostsSort, SubredditPost, SubredditPostsRequest, SubredditSort,
+};
 
 /// The main client which all Reddit APIs are called through.
 pub struct RedditClient {
@@ -67,10 +69,15 @@ impl RedditClient {
         query: impl AsRef<str>,
         sort: SearchPostsSort,
     ) -> impl '_ + Send + Stream<Item = Result<SubredditPost, Error>> {
-        self.pages(SearchPostsRequest::new(
-            query.as_ref().to_owned(),
-            sort,
-        ))
-        .items()
+        self.pages(SearchPostsRequest::new(query.as_ref().to_owned(), sort))
+            .items()
+    }
+
+    pub(crate) async fn authentication(&self) -> Result<String, Error> {
+        self.access_token.authentication(&self.client).await
+    }
+
+    pub(crate) fn client(&self) -> &Client {
+        &self.client
     }
 }

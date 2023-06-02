@@ -83,6 +83,6 @@ mod test {
     #[tokio::test]
     async fn access_token() {
         let client = RedditClient::new().unwrap();
-        dbg!(client.access_token.authentication(&client.client).await).unwrap();
+        dbg!(client.authentication().await).unwrap();
     }
 }

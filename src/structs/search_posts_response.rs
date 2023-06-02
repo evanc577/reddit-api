@@ -1,6 +1,7 @@
 use serde::Deserialize;
 
 use super::{PageInfo, SubredditPost};
+use crate::traits::Response;
 
 #[derive(Debug, Deserialize)]
 #[serde(rename_all = "camelCase")]
@@ -46,12 +47,12 @@ pub enum PostType {
     AdPost,
 }
 
-impl SearchPostsResponse {
-    pub(crate) fn page_info(&self) -> &PageInfo {
+impl Response<SubredditPost> for SearchPostsResponse {
+    fn page_info(&self) -> &PageInfo {
         &self.data.search.general.posts.page_info
     }
 
-    pub(crate) fn posts(self) -> Vec<SubredditPost> {
+    fn items(self) -> Vec<SubredditPost> {
         self.data
             .search
             .general

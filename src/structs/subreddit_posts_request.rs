@@ -2,6 +2,7 @@ use serde::Serialize;
 
 use super::subreddit_sort::SubredditSort;
 use crate::constants::request::SUBREDDIT_POSTS_ID;
+use crate::traits::Request;
 
 #[derive(Debug, Serialize)]
 pub(crate) struct SubredditPostsRequest {
@@ -31,9 +32,11 @@ impl SubredditPostsRequest {
             },
         }
     }
+}
 
-    pub(crate) fn set_cursor(&mut self, after: String) {
-        self.variables.after = Some(after);
+impl Request for SubredditPostsRequest {
+    fn set_cursor(&mut self, cursor: String) {
+        self.variables.after = Some(cursor);
     }
 }
 
