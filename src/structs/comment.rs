@@ -1,6 +1,6 @@
 use serde::{Deserialize, Serialize};
 
-use super::{Redditor, SubredditPost};
+use super::{Post, redditor::Redditor};
 
 #[derive(Debug, Clone, Deserialize, Serialize)]
 #[serde(rename_all = "camelCase")]
@@ -9,7 +9,7 @@ pub struct Comment {
     pub created_at: String,
     pub edited_at: Option<String>,
     pub parent: Option<CommentParent>,
-    pub post_info: SubredditPost,
+    pub post_info: Post,
 
     pub author_info: Redditor,
 

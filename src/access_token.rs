@@ -7,7 +7,7 @@ use tokio::sync::Mutex;
 
 use crate::error::Error;
 
-#[derive(Default)]
+#[derive(Default, Clone)]
 pub(crate) struct AccessToken {
     token: Arc<Mutex<Option<AccessTokenInternal>>>,
 }

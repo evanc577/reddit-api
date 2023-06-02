@@ -1,6 +1,6 @@
 use serde::Deserialize;
 
-use super::{PageInfo, SubredditPost};
+use super::{PageInfo, Post};
 use crate::traits::Response;
 
 #[derive(Debug, Deserialize)]
@@ -44,16 +44,17 @@ struct Edge {
 #[derive(Debug, Clone, Deserialize)]
 #[serde(tag = "__typename")]
 pub enum PostType {
-    SubredditPost(SubredditPost),
+    SubredditPost(Post),
+    ProfilePost(Post),
     AdPost,
 }
 
-impl Response<SubredditPost> for SearchPostsResponse {
+impl Response<Post> for SearchPostsResponse {
     fn page_info(&self) -> &PageInfo {
         &self.data.search.general.posts.page_info
     }
 
-    fn items(self) -> Vec<SubredditPost> {
+    fn items(self) -> Vec<Post> {
         self.data
             .search
             .general
@@ -62,6 +63,7 @@ impl Response<SubredditPost> for SearchPostsResponse {
             .into_iter()
             .filter_map(|e| match e.node {
                 PostType::SubredditPost(post) => Some(post),
+                PostType::ProfilePost(post) => Some(post),
                 _ => None,
             })
             .collect()

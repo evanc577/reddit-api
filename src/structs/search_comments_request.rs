@@ -29,7 +29,28 @@ struct Filter {
 }
 
 impl SearchCommentsRequest {
-    pub(crate) fn new(query: String, sort: SearchCommentsSort) -> Self {
+    pub(crate) fn new(
+        query: String,
+        sort: SearchCommentsSort,
+        subreddit: Option<String>,
+        nsfw: bool,
+    ) -> Self {
+        let mut filters = vec![Filter {
+            key: "time_range".into(),
+            value: "all".into(),
+        }];
+        if let Some(s) = subreddit {
+            filters.push(Filter {
+                key: "subreddit_names".into(),
+                value: s,
+            });
+        }
+        if nsfw {
+            filters.push(Filter {
+                key: "nsfw".into(),
+                value: "1".into(),
+            });
+        }
         Self {
             id: SEARCH_COMMENTS_ID,
             variables: Variables {
@@ -37,10 +58,7 @@ impl SearchCommentsRequest {
                 product_surface: "android",
                 after_cursor: None,
                 sort,
-                filters: vec![Filter {
-                    key: "time_range".into(),
-                    value: "all".into(),
-                }],
+                filters,
             },
         }
     }

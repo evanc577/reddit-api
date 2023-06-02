@@ -29,11 +29,14 @@ macro_rules! impl_page_turner {
                 }
 
                 // Parse response
+                // let text = response.text().await?;
+                // eprintln!("{}", &text);
+                // let parsed_response: $resp = serde_json::from_str(&text).unwrap();
                 let parsed_response: $resp = response.json().await?;
                 let page_info = parsed_response.page_info().clone();
                 let items = parsed_response.items();
-                if page_info.has_next_page {
-                    request_data.set_cursor(page_info.end_cursor);
+                if let Some(cursor) = page_info.end_cursor {
+                    request_data.set_cursor(cursor);
                     Ok(TurnedPage::next(items, request_data))
                 } else {
                     Ok(TurnedPage::last(items))
@@ -46,12 +49,12 @@ macro_rules! impl_page_turner {
 impl_page_turner!(
     structs::SubredditPostsRequest,
     structs::SubredditPostsResponse,
-    structs::SubredditPost
+    structs::Post
 );
 impl_page_turner!(
     structs::SearchPostsRequest,
     structs::SearchPostsResponse,
-    structs::SubredditPost
+    structs::Post
 );
 impl_page_turner!(
     structs::SearchCommentsRequest,

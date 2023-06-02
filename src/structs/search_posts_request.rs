@@ -71,7 +71,25 @@ impl From<&Variables> for VariablesSerialized {
 }
 
 impl SearchPostsRequest {
-    pub(crate) fn new(query: String, sort: SearchPostsSort) -> Self {
+    pub(crate) fn new(
+        query: String,
+        sort: SearchPostsSort,
+        subreddit: Option<String>,
+        nsfw: bool,
+    ) -> Self {
+        let mut filters = Vec::new();
+        if let Some(s) = subreddit {
+            filters.push(Filter {
+                key: "subreddit_names".into(),
+                value: s,
+            });
+        }
+        if nsfw {
+            filters.push(Filter {
+                key: "nsfw".into(),
+                value: "1".into(),
+            });
+        }
         Self {
             id: SEARCH_POSTS_ID,
             variables: Variables {
@@ -79,7 +97,7 @@ impl SearchPostsRequest {
                 product_surface: "android",
                 after_cursor: None,
                 sort,
-                filters: Vec::new(),
+                filters,
             },
         }
     }

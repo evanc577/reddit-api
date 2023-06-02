@@ -4,7 +4,7 @@ use super::{Media, Redditor};
 
 #[derive(Debug, Clone, Deserialize, Serialize)]
 #[serde(rename_all = "camelCase")]
-pub struct SubredditPost {
+pub struct Post {
     pub id: String,
     pub created_at: String,
     pub edited_at: Option<String>,

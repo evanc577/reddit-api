@@ -1,7 +1,12 @@
 use serde::{Deserialize, Serialize};
 
 #[derive(Debug, Clone, Deserialize, Serialize)]
-pub struct Redditor {
-    pub id: String,
-    pub name: String,
+#[serde(tag = "__typename")]
+pub enum Redditor {
+    Redditor {
+        id: String,
+        name: String,
+    },
+    DeletedRedditor,
+    UnavailableRedditor,
 }

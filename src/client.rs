@@ -7,12 +7,10 @@ use reqwest::{header, Client, ClientBuilder};
 use crate::access_token::AccessToken;
 use crate::constants;
 use crate::error::Error;
-use crate::structs::{
-    Comment, SearchCommentsRequest, SearchCommentsSort, SearchPostsRequest, SearchPostsSort,
-    SubredditPost, SubredditPostsRequest, SubredditSort,
-};
+use crate::structs::*;
 
 /// The main client which all Reddit APIs are called through.
+#[derive(Clone)]
 pub struct RedditClient {
     pub(crate) client: Client,
     pub(crate) access_token: AccessToken,
@@ -51,44 +49,121 @@ impl RedditClient {
         })
     }
 
-    /// Subreddit posts.
-    pub async fn subreddit_posts(
-        &self,
-        subreddit: impl AsRef<str>,
-        sort: SubredditSort,
-    ) -> impl '_ + Send + Stream<Item = Result<SubredditPost, Error>> {
-        self.pages(SubredditPostsRequest::new(
-            subreddit.as_ref().to_owned(),
-            sort,
-        ))
-        .items()
-    }
-
-    /// Search posts.
-    pub async fn search_posts(
-        &self,
-        query: impl AsRef<str>,
-        sort: SearchPostsSort,
-    ) -> impl '_ + Send + Stream<Item = Result<SubredditPost, Error>> {
-        self.pages(SearchPostsRequest::new(query.as_ref().to_owned(), sort))
-            .items()
-    }
-
-    /// Search comments.
-    pub async fn search_comments(
-        &self,
-        query: impl AsRef<str>,
-        sort: SearchCommentsSort,
-    ) -> impl '_ + Send + Stream<Item = Result<Comment, Error>> {
-        self.pages(SearchCommentsRequest::new(query.as_ref().to_owned(), sort))
-            .items()
-    }
-
     pub(crate) async fn authentication(&self) -> Result<String, Error> {
         self.access_token.authentication(&self.client).await
     }
 
     pub(crate) fn client(&self) -> &Client {
         &self.client
+    }
+}
+
+/// Builders for Reddit API endpoints
+#[buildstructor::buildstructor]
+impl RedditClient {
+    #[builder(entry = "subreddit_posts_query", exit = "build", visibility = "pub")]
+    fn subreddit_posts(
+        &self,
+        subreddit: String,
+        sort: SubredditSort,
+    ) -> SubredditPostsQueryBuilder {
+        SubredditPostsQueryBuilder {
+            client: self.clone(),
+            subreddit,
+            sort,
+        }
+    }
+
+    #[builder(entry = "search_posts_query", exit = "build", visibility = "pub")]
+    fn search_posts(
+        &self,
+        query: String,
+        sort: SearchPostsSort,
+        subreddit: Option<String>,
+        nsfw: Option<bool>,
+    ) -> SearchPostsQueryBuilder {
+        SearchPostsQueryBuilder {
+            client: self.clone(),
+            query,
+            sort,
+            subreddit,
+            nsfw: nsfw.unwrap_or(false),
+        }
+    }
+
+    #[builder(entry = "search_comments_query", exit = "build", visibility = "pub")]
+    fn search_comments(
+        &self,
+        query: String,
+        sort: SearchCommentsSort,
+        subreddit: Option<String>,
+        nsfw: Option<bool>,
+    ) -> SearchCommentsQueryBuilder {
+        SearchCommentsQueryBuilder {
+            client: self.clone(),
+            query,
+            sort,
+            subreddit,
+            nsfw: nsfw.unwrap_or(false),
+        }
+    }
+}
+
+pub struct SubredditPostsQueryBuilder {
+    client: RedditClient,
+    subreddit: String,
+    sort: SubredditSort,
+}
+
+impl SubredditPostsQueryBuilder {
+    pub async fn execute(&self) -> impl '_ + Send + Stream<Item = Result<Post, Error>> {
+        self.client
+            .pages(SubredditPostsRequest::new(
+                self.subreddit.clone(),
+                self.sort.clone(),
+            ))
+            .items()
+    }
+}
+
+pub struct SearchPostsQueryBuilder {
+    client: RedditClient,
+    query: String,
+    sort: SearchPostsSort,
+    subreddit: Option<String>,
+    nsfw: bool,
+}
+
+impl SearchPostsQueryBuilder {
+    pub async fn execute(&self) -> impl '_ + Send + Stream<Item = Result<Post, Error>> {
+        self.client
+            .pages(SearchPostsRequest::new(
+                self.query.clone(),
+                self.sort.clone(),
+                self.subreddit.clone(),
+                self.nsfw,
+            ))
+            .items()
+    }
+}
+
+pub struct SearchCommentsQueryBuilder {
+    client: RedditClient,
+    query: String,
+    sort: SearchCommentsSort,
+    subreddit: Option<String>,
+    nsfw: bool,
+}
+
+impl SearchCommentsQueryBuilder {
+    pub async fn execute(&self) -> impl '_ + Send + Stream<Item = Result<Comment, Error>> {
+        self.client
+            .pages(SearchCommentsRequest::new(
+                self.query.clone(),
+                self.sort.clone(),
+                self.subreddit.clone(),
+                self.nsfw,
+            ))
+            .items()
     }
 }

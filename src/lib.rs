@@ -8,4 +8,5 @@ mod traits;
 mod utils;
 
 pub use client::RedditClient;
+pub use client::*;
 pub use error::Error;

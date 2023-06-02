@@ -1,6 +1,6 @@
 use serde::Deserialize;
 
-use super::subreddit_post::SubredditPost;
+use super::post::Post;
 use super::PageInfo;
 use crate::traits::Response;
 
@@ -39,16 +39,16 @@ struct Edge {
 #[derive(Debug, Clone, Deserialize)]
 #[serde(tag = "__typename")]
 pub enum PostType {
-    SubredditPost(SubredditPost),
+    SubredditPost(Post),
     AdPost,
 }
 
-impl Response<SubredditPost> for SubredditPostsResponse {
+impl Response<Post> for SubredditPostsResponse {
     fn page_info(&self) -> &PageInfo {
         &self.data.post_feed.elements.page_info
     }
 
-    fn items(self) -> Vec<SubredditPost> {
+    fn items(self) -> Vec<Post> {
         self.data
             .post_feed
             .elements

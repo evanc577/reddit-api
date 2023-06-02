@@ -7,6 +7,7 @@ edition = "2021"
 
 [dependencies]
 async-trait = "0.1"
+buildstructor = "0.5"
 futures = "0.3"
 page-turner = "0.8"
 reqwest = { version = "0.11", features = ["rustls-tls", "json", "deflate", "gzip", "brotli"] }
