@@ -7,6 +7,5 @@ pub mod structs;
 mod traits;
 mod utils;
 
-pub use client::RedditClient;
-pub use client::*;
+pub use client::{RedditClient, *};
 pub use error::Error;

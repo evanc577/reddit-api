@@ -41,9 +41,10 @@ struct Edge {
 }
 
 #[allow(clippy::large_enum_variant)]
+#[allow(clippy::enum_variant_names)]
 #[derive(Debug, Clone, Deserialize)]
 #[serde(tag = "__typename")]
-pub enum PostType {
+pub(crate) enum PostType {
     SubredditPost(Post),
     ProfilePost(Post),
     AdPost,

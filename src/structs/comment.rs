@@ -1,6 +1,7 @@
 use serde::{Deserialize, Serialize};
 
-use super::{Post, redditor::Redditor};
+use super::redditor::Redditor;
+use super::Post;
 
 #[derive(Debug, Clone, Deserialize, Serialize)]
 #[serde(rename_all = "camelCase")]
