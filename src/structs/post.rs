@@ -43,7 +43,7 @@ pub struct Post {
 pub struct PostContent {
     pub markdown: String,
     pub richtext: String,
-    pub html: String,
+    pub html: Option<String>,
 }
 
 #[derive(Debug, Clone, Deserialize, Serialize)]
